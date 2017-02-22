@@ -12,10 +12,15 @@ my @titles = $content =~ /(?<=class="storylink">)([^<]+)/g;
 my @urls = $content =~ /(?=[^"]+" class="storylink">)([^"]*)/g;
 
 
-#TESTING
+#Test print, RSS formatting not proper
 foreach my $title ( @titles ){
-	print $title , "\n";
+	print "<title>$title</title>\n";
 }
+
+foreach my $title ( @titles ){
+	print "<description>$title</description>\n";
+}
+
 foreach my $url ( @urls ){
-	print $url , "\n";
+	print "<link>$url</link>\n";
 }
