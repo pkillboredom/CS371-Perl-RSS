@@ -11,16 +11,32 @@ my $content = $mech->content();
 my @titles = $content =~ /(?<=class="storylink">)([^<]+)/g;
 my @urls = $content =~ /(?=[^"]+" class="storylink">)([^"]*)/g;
 
+my $rssHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<rss version=\"2.0\">\n";
+my $rssChannelInfo = "\t<channel>\n\t\t<title>HackerNews feed<\/title>\n\t\t<link>https://news.ycombinator.com/<\/link>\n\t\t<description>Hacker News Feed<\/description>\n";
+my $rssChannelFooter = "\t<\/channel>\n";
+my $rssFooter = "<\/rss>";
 
-#Test print, RSS formatting not proper
-foreach my $title ( @titles ){
-	print "<title>$title</title>\n";
-}
+my @items;
+#uses index to pair titles to urls
+my $arraysize = scalar(@titles);
+foreach my $index (0..$arraysize){
+	my $title = $titles[$index];
+	my $url = $urls[$index];
+	if(length $title != 0){
+		$items[$index] = "\t\t<item>\n\t\t\t<title>$title<\/title>\n\t\t\t<link>$url<\/link>\n\t\t<\/item>";
+	}
+}	
 
-foreach my $title ( @titles ){
-	print "<description>$title</description>\n";
-}
+#Open file handle
+my $outputFileName = 'news.rss.xml';
+open(my $filehandle, '>', $outputFileName) or die "Opening file failed.";
 
-foreach my $url ( @urls ){
-	print "<link>$url</link>\n";
+print $filehandle $rssHeader;
+print $filehandle $rssChannelInfo;
+foreach my $item (@items){
+	print $filehandle $item . "\n";
 }
+print $filehandle $rssChannelFooter;
+print $filehandle $rssFooter;
+
+close $filehandle;
