@@ -18,13 +18,11 @@ my $rssFooter = "<\/rss>";
 
 my @items;
 #uses index to pair titles to urls
-my $arraysize = scalar(@titles);
+my $arraysize = scalar(@titles) - 1;
 foreach my $index (0..$arraysize){
 	my $title = $titles[$index];
 	my $url = $urls[$index];
-	if(length $title != 0){
-		$items[$index] = "\t\t<item>\n\t\t\t<title>$title<\/title>\n\t\t\t<link>$url<\/link>\n\t\t<\/item>";
-	}
+	$items[$index] = "\t\t<item>\n\t\t\t<title>$title<\/title>\n\t\t\t<link>$url<\/link>\n\t\t<\/item>";
 }	
 
 #Open file handle
